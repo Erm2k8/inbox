@@ -63,6 +63,33 @@ Um workflow do GitHub envia a fila para a planilha; não tente escrever na plani
 ### Nota
 Acrescente em `notas/ideias.md`: `- AAAA-MM-DD: texto limpo e curto`.
 
+## Melhorar os textos
+
+O que vai para o Plane, Calendar, planilha e notas deve ficar mais claro e completo do que o
+texto digitado no celular. Melhore a **forma e os detalhes verificáveis**, nunca invente fatos.
+O texto original sempre fica no log.
+
+- **Geral:** corrija ortografia, desfaça abreviações, mantenha nomes próprios e termos técnicos.
+  Não acrescente requisitos, valores ou datas que a pessoa não disse.
+- **Desejo com link:**
+  1. Tente abrir o link (WebFetch) e use o nome do produto da página como base, de forma concisa
+     (até ~80 caracteres), mantendo a ideia do que a pessoa escreveu.
+  2. Se a página for bloqueada (lojas como a Amazon recusam leitura automática), use as palavras do
+     próprio endereço (o trecho de texto antes de `/dp/` ou `/p/`, e `keywords=` quando houver).
+     Exemplo: o endereço de "limpador multiuso" traz `limpeza-computador-teclado-telefone-ferramenta`
+     e `Escova-Limpeza-Ouvido-Tablet-Laptops`, então o item vira
+     "Kit de limpeza multiuso (computador, teclado, telefone, tablet e laptop)".
+  3. Se não houver informação segura, mantenha o nome da pessoa, só corrigido.
+  4. `valor`: o que a pessoa disse. Se ela não disse e a página mostra o preço com clareza, use esse
+     preço e registre no log "(preço da página)". Nunca estime.
+  5. Remova parâmetros de rastreamento do link (`ref=`, `dib=`, `qid=`, `sr=`, `utm_*` etc.).
+- **Desejo sem link:** nome claro e capitalizado ("Suporte de monitor"). Sem detalhes inventados.
+- **Gasto:** descrição curta, capitalizada, sem valor nem data no texto ("Ração do gato").
+- **Tarefa (Plane):** título claro no imperativo; descrição com o contexto que a pessoa deu, o texto
+  original e, se deduzir um critério de pronto, marcado como "(sugestão)".
+- **Evento (Calendar):** título claro ("Reunião com o time Simba"); na descrição, o texto original.
+- **Nota:** reescreva curta e legível, preservando o sentido.
+
 ## Regras fixas
 
 - Nunca apague nada (itens, eventos, arquivos, linhas da fila).
