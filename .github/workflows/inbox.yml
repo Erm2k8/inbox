@@ -1,0 +1,44 @@
+name: Coletar inbox do Telegram
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"   # a cada ~10 min (o GitHub pode atrasar alguns minutos)
+  workflow_dispatch: {}       # botão "Run workflow" para testar na hora
+
+concurrency:
+  group: telegram-inbox
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Coletar mensagens
+        id: collect
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python3 .github/scripts/telegram_collect.py
+
+      - name: Commit do inbox
+        if: steps.collect.outputs.collected != '0'
+        run: |
+          git config user.name "inbox-bot"
+          git config user.email "inbox-bot@users.noreply.github.com"
+          git add inbox.md
+          git commit -m "inbox: +${{ steps.collect.outputs.collected }} item(ns)"
+          git pull --rebase
+          git push
+
+      - name: Confirmar no Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          COLLECTED: ${{ steps.collect.outputs.collected }}
+        run: python3 .github/scripts/telegram_collect.py ack
