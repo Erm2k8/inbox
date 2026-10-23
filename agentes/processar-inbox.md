@@ -55,6 +55,11 @@ Desejo:
 {"id":"<id>","tipo":"desejo","item":"suporte de monitor","categoria":"Casa","valor":150.0,"link":""}
 ```
 - `categoria` só pode ser: Moto, Computador, Roupa, Casa, Outros. `valor` e `link` podem ser vazios (`null` / `""`).
+- **Classifique por julgamento. "Outros" só quando nada servir.** Itens para o setup ou acessórios de
+  informática (mouse, teclado, suporte de notebook ou de celular, adaptador, cabo, hub, base ou cooler
+  de notebook, limpa telas, kit de limpeza, monitor, webcam, fone, microfone...) são **Computador**.
+  Peças e acessórios da moto são **Moto**; roupas, calçados e acessórios de vestir são **Roupa**;
+  móveis, utensílios e itens de casa são **Casa**.
 
 `id`: os 10 primeiros caracteres do SHA-1 da linha original do inbox, mais um índice se a linha gerar
 vários registros (`a1b2c3d4e5-1`). Assim, reprocessar a mesma linha não duplica nada.
@@ -80,8 +85,10 @@ O texto original sempre fica no log.
      e `Escova-Limpeza-Ouvido-Tablet-Laptops`, então o item vira
      "Kit de limpeza multiuso (computador, teclado, telefone, tablet e laptop)".
   3. Se não houver informação segura, mantenha o nome da pessoa, só corrigido.
-  4. `valor`: o que a pessoa disse. Se ela não disse e a página mostra o preço com clareza, use esse
-     preço e registre no log "(preço da página)". Nunca estime.
+  4. `valor`: o que a pessoa disse. Se ela não disse, tente o preço pelo link: se a página abrir e
+     mostrar o preço com clareza, registre-o e anote no log "(preço da página)". Amazon, Mercado Livre
+     e AliExpress recusam leitura automática (`robots_disallowed`): nesses casos deixe o valor vazio e
+     anote no log "sem preço (loja bloqueia leitura)". Não tente contornar o bloqueio e nunca estime.
   5. Remova parâmetros de rastreamento do link (`ref=`, `dib=`, `qid=`, `sr=`, `utm_*` etc.).
 - **Desejo sem link:** nome claro e capitalizado ("Suporte de monitor"). Sem detalhes inventados.
 - **Gasto:** descrição curta, capitalizada, sem valor nem data no texto ("Ração do gato").
