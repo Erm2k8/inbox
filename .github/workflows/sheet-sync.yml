@@ -1,0 +1,40 @@
+name: Enviar fila para a planilha
+
+on:
+  push:
+    paths:
+      - "planilha/fila.jsonl"
+  schedule:
+    - cron: "23 * * * *"     # reenvio de segurança, de hora em hora
+  workflow_dispatch: {}
+
+concurrency:
+  group: sheet-sync
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enviar pendentes
+        id: sync
+        env:
+          SHEETS_WEBHOOK_URL: ${{ secrets.SHEETS_WEBHOOK_URL }}
+          SHEETS_SECRET: ${{ secrets.SHEETS_SECRET }}
+        run: python3 .github/scripts/sheet_sync.py
+
+      - name: Registrar ids enviados
+        if: steps.sync.outputs.sent != '' && steps.sync.outputs.sent != '0'
+        run: |
+          git config user.name "inbox-bot"
+          git config user.email "inbox-bot@users.noreply.github.com"
+          git add planilha/enviado.txt
+          git commit -m "planilha: ${{ steps.sync.outputs.sent }} registro(s) enviado(s)"
+          git pull --rebase
+          git push
